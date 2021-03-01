@@ -1,0 +1,223 @@
+html{
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+body{
+  background-color: rgb(3,3,5);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  color: rgb(250, 250, 250);
+}
+
+main{
+  margin-top:0px;
+  overflow: hidden;
+  text-align: center;
+}
+
+footer
+{
+  margin-top: 300px;
+  padding-top: 150px;
+  padding-bottom: 10px;
+  width: 100%;
+  background-image: url("images/muhmorMarbl2K.png");
+  background-size: 1920px 1080px;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+footer b
+{
+  padding-left: 20px;
+}
+
+.openingPageHeader
+{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    text-align: center;
+
+    background-image: url("images/gridMarblNorm.png");
+    background-size:cover;
+
+    background-position: center;
+
+    transition: height 0.8s;
+}
+.openingPageHeader h1{
+  font-family: TechnicalDraw;
+  font-size: 80px;
+  padding-top: 25vh;
+}
+
+.openingPageHeader h2{
+  font-family: TechnicalDraw;
+  font-size: 43px;
+  margin-top: -50px;
+}
+
+.openingPageHeader h3{
+  font-family: TechnicalDraw;
+  font-size: 16px;
+
+  padding-top: 27vh;
+}
+
+.openingPageHeader .iconbox{
+  height:50px;
+  pointer-events:none;
+}
+
+.openingPageHeader .iconbox img{
+  height: 50px;
+  width: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.progressBar{
+  position: fixed;
+  height: 100%;
+  width: 3px;
+}
+
+.progressIndicator{
+  position:absolute;
+  background: linear-gradient(90deg, rgba(250,250,250,1) 0%, rgba(0,212,255,0) 100%);
+  height: 100%;
+  width: 100%;
+  background-color: white;
+}
+
+
+.projectgroup-title{
+  text-align: left;
+  padding-top: 100px;
+  font-size: 55px;
+  margin-top: 35px;
+  margin-bottom: 80px;
+
+}
+
+.projectgroup{
+  width: 80%;
+  max-width: 856px;
+  margin: auto;
+  margin-top: 35px;
+  margin-bottom: 15px;
+}
+
+.projectbox {
+  display: inline-table;
+  margin: 1%;
+  margin-bottom: 2%;
+  background-size: cover;
+  background-position: center;
+}
+
+.projectbox h1{
+  position: absolute;
+  font: 46px "Trebuchet Ms", monospace;
+  max-width: 400px;
+  padding-left: 15px;
+  margin-top: 70px;
+  color:  white;
+  font-weight: bold;
+  text-shadow: 0 4px 0px rgb(80,80,80), 0 5px 0px black, 1px 0 0px black, -1px 0 0px black, 0 3px 5px black;
+  pointer-events:none;
+}
+
+.projectbox h2{
+  position: absolute;
+  max-width: 400px;
+  padding-left: 17px;
+  margin-top: 120px;
+  color: rgb(210,210,210);
+  font: 20px "Trebuchet Ms", monospace;
+  font-weight:lighter;
+  text-shadow: 0 1px 0px rgb(80,80,80), 0 2px 0px black, 0 1px 2px black, 0 0 2px black;
+  pointer-events:none;
+}
+
+
+.bigbox
+{
+  height: 150px;
+  width: 96.5%;
+  max-width: 856px;
+  display: inline-table;
+}
+
+.mediumbox
+{
+  height: 150px;
+  width: 47%;
+  max-width: 428px;
+  display: inline-table;
+}
+
+.smallbox
+{
+  height: 150px;
+  width: 22.25%;
+  max-width: 428px;
+  display: inline-table;
+}
+
+.projectbox .iconbox{
+  height:40px;
+  right: 0;
+  float:right;
+  pointer-events:none;
+}
+
+.projectbox .iconbox img{
+  height: 40px;
+  width: 40px;
+}
+
+.highlightbanner
+{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0);
+  transition: background-color 0.2s;
+}
+
+.highlightbanner:hover
+{
+  background-color: rgba(255,255,255,0.2);
+}
+.highlightbanner:active
+{
+  background-color: rgba(255,208,0,0.2);
+}
+
+
+
+
+@font-face {
+  font-family: Baloo;
+  src: url("atezai_files/fonts/Anonymous_Pro_B.ttf") format("truetype");
+}
+@font-face {
+  font-family: CocoLight;
+  src: url("atezai_files/fonts/Coco-Gothic-Light-trial.ttf") format("truetype");
+}
+@font-face {
+  font-family: CocoRegular;
+  src: url("atezai_files/fonts/Coco-Gothic-Regular-trial.ttf") format("truetype");
+}
+@font-face {
+  font-family: CocoHeavy;
+  src: url("atezai_files/fonts/Coco-Gothic-Heavy-trial.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: TechnicalDraw;
+  src: url("fonts/handwriting-black-draft.otf") format("opentype");
+}
