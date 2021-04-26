@@ -1,5 +1,5 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
-import '../css/main.css'
+//import '../css/main.css'
 //import * as THREE from 'three'
 
 
