@@ -1,249 +1,253 @@
-<html>
+ <!DOCTYPE html>
+ <html>
 
 	<head>
 		<title>MH portfolio</title>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1" >
-		<link rel="shortcut icon" href="atezai_files/images/icons/favicon_MH.png">
-		<link rel="stylesheet" href="style.css" type="text/css">
+		<script src="./public/js/script.js"></script>
+		<link rel="stylesheet" href="./public/css/main.css" type="text/css">
+		<script type="module" src="./public/js/shaderScript.js"></script>
 	</head>
 
-	<body onscroll="ScrollingLandingPage();">
+	<body>
 
-    <header class="openingPageHeader">
-			<div class="dots"></div>
-			<div class="dots" style="background-size: 64.8px 64.8px;"></div>
-			<div class="dots" style="background-size: 66px 66px;"></div>
-			<div class="dots" style="background-size: 69px 64px; animation: dotScale 5s infinite;"></div>
+    	<header class="openingPageHeader">
+			<div class="bgrid"></div>
+			<div class="dots" style=" opacity: 0.8;"></div>
+			<div class="dots" style=" animation: dotScale2 5s infinite;"></div>
+			<div class="dots" style=" animation: dotScale3 5s infinite;"></div>
+			<div class="dots" style=" animation: dotScale4 5s infinite;"></div>
 			<div class="gradientdiv">
 				<h1>MH</h1>
 				<h2>portfolio</h2>
 				<h3>design, programming, visual effects, game dev</h3>
 				<div class="iconbox">
-					<img src="images/icons/unityIcon.png">
-					<img src="images/icons/unrealIcon.png">
-					<img src="images/icons/blenderIcon.png">
-					<img src="images/icons/shaderIcon.png">
-					<img src="images/icons/psIcon.png">
-					<img src="images/icons/csharpIcon.png">
-					<img src="images/icons/cplusplusIcon.png">
+					<img src="./public/img/icons/unityIcon.png">
+					<img src="./public/img/icons/unrealIcon.png">
+					<img src="./public/img/icons/blenderIcon.png">
+					<img src="./public/img/icons/shaderIcon.png">
+					<img src="./public/img/icons/psIcon.png">
+					<img src="./public/img/icons/csharpIcon.png">
+					<img src="./public/img/icons/cplusplusIcon.png">
 				</div>
-				<div class="arrow" onclick="window.scrollTo(0, 100)"></div>
-				<div class="arrowBox"></div>
+				<div id="headerArrow" class="arrow"></div>
+				<!--<div class="arrowBox"></div>-->
 			</div>
 		</header>
 
+    <canvas class="webglGridShader"></canvas>
 
 		<main>
 
-			<br>
+			<br><br><br><br><br><br><br><br><br>
 
 			<div class="projectgroup">
 					<div class="projectgroup-title">|Projects</div>
-						<div class="projectbox bigbox" style="background-image: url(images/banners/UpwayBanner.png)">
+						<div class="projectbox bigbox" style="background-image: url(./public/img/banners/UpwayBanner.png)">
 							<h1>Cubye</h1>
 							<h2>Mini game for android.</h2>
 							<div class="iconbox">
-								<img src="images/icons/unityIcon.png"/>
+								<img src="./public/img/icons/unityIcon.png"/>
 							</div>
 							<div class="highlightbanner"></div>
 						</div>
+			</div>
+
+			<!-- ############################################ GAME PROTOTYPES -->
+			<div class="projectgroup">
+				<div class="projectgroup-title">|Game Prototypes</div>
+
+				<div class="projectbox bigbox" style="background-image: url(./public/img/banners/UpwayBanner.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
 				</div>
 
-				<!-- ############################################ GAME PROTOTYPES -->
-				<div class="projectgroup">
-					<div class="projectgroup-title">|Game Prototypes</div>
-
-					<div class="projectbox bigbox" style="background-image: url(images/banners/UpwayBanner.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/CubyeBanner.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
 					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/CubyeBanner.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/MailManBanner2.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/BadCallBanner.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/GalaxyWarBanner.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/BinnyBanner.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
+					<div class="highlightbanner"></div>
 				</div>
 
-				<!-- ############################################ Tools -->
-				<div class="projectgroup">
-					<div class="projectgroup-title">|Tools</div>
-
-					<div class="projectbox bigbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Noise Generator</h1>
-						<h2>Online layered perlin noise generator.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/MailManBanner2.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
 					</div>
-
-					<div class="projectbox bigbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Road Generators</h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
+					<div class="highlightbanner"></div>
 				</div>
 
-				<!-- ############################################ Tools -->
-				<div class="projectgroup">
-					<div class="projectgroup-title">|Scripts</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Autoroad</h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/BadCallBanner.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
 					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Autoroad</h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
+					<div class="highlightbanner"></div>
 				</div>
 
-				<!-- ############################################ SHADERS -->
-				<div class="projectgroup">
-					<div class="projectgroup-title">|Shaders</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/GalaxyWarBanner.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
 					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox mediumbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1>Cubye</h1>
-						<h2>Mini game for android.</h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banners/aboutme.png)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
-					<div class="projectbox smallbox" style="background-image: url(images/banana.gif)">
-						<h1></h1>
-						<h2></h2>
-						<div class="iconbox">
-							<img src="images/icons/unityIcon.png">
-						</div>
-						<div class="highlightbanner"></div>
-					</div>
-
+					<div class="highlightbanner"></div>
 				</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/BinnyBanner.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+			</div>
+
+			<!-- ############################################ Tools -->
+			<div class="projectgroup">
+				<div class="projectgroup-title">|Tools</div>
+
+				<div class="projectbox bigbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Noise Generator</h1>
+					<h2>Online layered perlin noise generator.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox bigbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Road Generators</h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+			</div>
+
+			<!-- ############################################ Tools -->
+			<div class="projectgroup">
+				<div class="projectgroup-title">|Scripts</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Autoroad</h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Autoroad</h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+			</div>
+
+			<!-- ############################################ SHADERS -->
+			<div class="projectgroup">
+				<div class="projectgroup-title">|Shaders</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox mediumbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1>Cubye</h1>
+					<h2>Mini game for android.</h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banners/aboutme.png)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+				<div class="projectbox smallbox" style="background-image: url(./public/img/banana.gif)">
+					<h1></h1>
+					<h2></h2>
+					<div class="iconbox">
+						<img src="./public/img/icons/unityIcon.png">
+					</div>
+					<div class="highlightbanner"></div>
+				</div>
+
+			</div>
 
 		</main>
 
@@ -255,21 +259,25 @@
 		<script>
 
 			var landingPageActive = true;
-			var landingPageBackground = document.getElementsByClassName("openingPageHeader")[0];
+			var landingPage = document.getElementsByClassName("openingPageHeader")[0];
+			var arrowDiv = document.getElementById("headerArrow");
 
-			function ScrollingLandingPage()
+			function ScrollingLandingPage(forceToggle)
 			{
 				var height = Math.round(window.innerHeight - window.scrollY*2);
 
-				if(landingPageActive && window.scrollY > 0)
+				if(landingPageActive && (forceToggle || window.scrollY > 0))
 				{
-					landingPageBackground.style.height = "50px";
-
+					landingPage.style.height = "50px";
+					arrowDiv.style.transform = "rotate(225deg)";
+					window.scrollTo(0, 200);
 					landingPageActive = false;
 				}
-				else if(window.scrollY <= 0)
+				else if(forceToggle || window.scrollY <= 0)
 				{
-					landingPageBackground.style.height = "100%";
+					landingPage.style.height = "100%";
+					arrowDiv.style.transform = "rotate(45deg)"
+
 					landingPageActive = true;
 				}
 			}
