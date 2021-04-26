@@ -1,6 +1,7 @@
+import * as THREE from 'https://threejs.org/build/three.module.js';
 import '../css/main.css'
 //import * as THREE from 'three'
-import * as THREE from 'https://threejs.org/build/three.module.js';
+
 
 const _gridVS = `
 varying vec2 Uv;
