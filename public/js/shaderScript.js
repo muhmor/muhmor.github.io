@@ -98,7 +98,7 @@ void main(){
 
 
 // Canvas
-const canvas = document.querySelector('webglGridShader')
+const canvas = document.querySelector('canvas.webglGridShader')
 
 // Scene
 const scene = new THREE.Scene()
