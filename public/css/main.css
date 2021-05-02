@@ -36,6 +36,12 @@ footer
   background-position: center;
 }
 
+footer b
+{
+  padding-left: 15px;
+  padding-bottom: 10px;
+}
+
 .OpeningPage
 {
     width: 100%;

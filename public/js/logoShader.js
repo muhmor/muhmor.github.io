@@ -1,6 +1,8 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
 
-const _fresnelVS = `
+
+
+const _colorSphereVS = `
 varying vec3 v_Normal;
 void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
@@ -8,7 +10,7 @@ void main(){
 }
 `;
 
-const _fresnelFS = `
+const _colorSphereFS = `
 varying vec3 v_Normal;
 
 void main(void)
@@ -17,11 +19,74 @@ void main(void)
     fresnelValue = 1.0 - clamp(fresnelValue, 0.0, 1.0);
     vec3 col = mix(v_Normal, vec3(1.0, 1.0, 1.0), fresnelValue);
 
-    float inverseFresnel = dot(v_Normal, vec3(0.0, 0.0, -1.0));
-    inverseFresnel = 1.0 - clamp(inverseFresnel, 0.0, 1.0);;
-    col *= pow(inverseFresnel, 4.0);
-
     gl_FragColor = vec4(col, fresnelValue);
+}
+`;
+
+const _lidSphereVS = `
+varying vec3 v_Normal;
+
+void main(){
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    v_Normal = normal;
+}
+`;
+
+const _lidSphereFS = `
+#define M_PI 3.1415926535897932384626433832795
+
+varying vec3 v_Normal;
+
+mat4 rotationMatrix(vec3 axis, float angle)
+{
+    axis = normalize(axis);
+    float s = sin(angle);
+    float c = cos(angle);
+    float oc = 1.0 - c;
+
+    return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                0.0,                                0.0,                                0.0,                                1.0);
+}
+
+vec3 rotate(vec3 v, vec3 axis, float angle)
+{
+  angle /= 180.0;
+  angle *= M_PI;
+	mat4 m = rotationMatrix(axis, angle);
+	return (m * vec4(v, 1.0)).xyz;
+}
+
+vec4 calculateLid(vec3 normal, vec4 backColor, vec4 rimColor, float angle, float opacityEdgeHardness, float backFresnelHardness)
+{
+  vec3 rotVector = rotate(vec3(0.0, 0.0, 1.0), vec3(-1.0, 0.0, 0.0), angle);
+
+  float opacityFresnel = dot(normal, rotVector);
+  opacityFresnel = 1.0 - clamp(opacityFresnel * opacityEdgeHardness, 0.0, 1.0);
+
+  float backFresnel = dot(normal, -rotVector);
+  backFresnel = 1.0 - clamp(backFresnel, 0.0, 1.0);
+  backFresnel = pow(backFresnel, backFresnelHardness);
+
+  vec4 lid = mix(backColor, rimColor, backFresnel);
+  lid.w = opacityFresnel;
+
+  return lid;
+}
+
+void main(void)
+{
+  float cleanf = dot(v_Normal, vec3(0.0, 1.0, 0.0));
+  cleanf = floor(cleanf + 1.0);
+
+  vec4 backColor = vec4(0.0, 0.0, 0.0, 0.0);
+  vec4 rimColor = vec4(1.0, 1.0, 1.0, 1.0);
+
+  vec4 topLid = calculateLid(v_Normal, backColor, rimColor, 45.0, 50.0, 6.0);
+  vec4 bottomLid = calculateLid(v_Normal, backColor, rimColor, -25.0, 50.0, 6.0);
+
+  gl_FragColor = mix(bottomLid, topLid, cleanf);
 }
 `;
 
@@ -38,32 +103,52 @@ const sizes = {
 }
 
 // Materials
-const pmaterial = new THREE.PointsMaterial({
-    size: 0.02
+const pointMaterial = new THREE.PointsMaterial({
+    size: 0.1
 })
+pointMaterial.color = new THREE.Color(0xffffff)
 
-pmaterial.color = new THREE.Color(0xffffff)
 
-const fmaterial = new THREE.ShaderMaterial({
-    vertexShader: _fresnelVS,
-    fragmentShader: _fresnelFS,
+const colorSphereMat = new THREE.ShaderMaterial({
+    vertexShader: _colorSphereVS,
+    fragmentShader: _colorSphereFS,
 })
-fmaterial.transparent = true;
+colorSphereMat.transparent = true;
+colorSphereMat.depthWrite = false;
+colorSphereMat.depthTest = true;
 
-const ffmaterial = new THREE.MeshBasicMaterial()
-ffmaterial.color = new THREE.Color(0xffffff)
+const lidSphereMat = new THREE.ShaderMaterial({
+    vertexShader: _lidSphereVS,
+    fragmentShader: _lidSphereFS,
+})
+lidSphereMat.transparent = true;
+lidSphereMat.depthWrite = false;
+lidSphereMat.depthTest = true;
+
+
 // Objects
-const spheregeometry = new THREE.SphereGeometry(1, 10, 10);
-const fspheregeometry = new THREE.SphereGeometry(1.015, 32, 32);
+const pointSphereGeometry = new THREE.SphereGeometry(1, 10, 10);
+const colorSphereGeometry = new THREE.SphereGeometry(1.015, 32, 32);
+const lidSphereGeometry = new THREE.SphereGeometry(1.02, 32, 32);
 
 // Mesh
-const sphereOb1 = new THREE.Points(spheregeometry,pmaterial);
+const sphereOb1 = new THREE.Points(pointSphereGeometry, pointMaterial);
 scene.add(sphereOb1);
-const sphereOb2 = new THREE.Points(spheregeometry,pmaterial);
+const sphereOb2 = new THREE.Points(pointSphereGeometry, pointMaterial);
 scene.add(sphereOb2);
 
-const fsphereOb1 = new THREE.Mesh(fspheregeometry,fmaterial);
-scene.add(fsphereOb1);
+const colorSphere = new THREE.Mesh(colorSphereGeometry, colorSphereMat);
+scene.add(colorSphere);
+
+const lidSphere = new THREE.Mesh(lidSphereGeometry, lidSphereMat);
+scene.add(lidSphere);
+
+colorSphere.renderOrder = 1;
+lidSphere.renderOrder = 2;
+
+sphereOb1.parent = lidSphere;
+sphereOb2.parent = lidSphere;
+colorSphere.parent = lidSphere;
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 100000)
@@ -103,7 +188,6 @@ function ResizeCameraAndRenderer()
 
   // Update logo points size
   //sphereOb1.material.uniforms.size.value = 1;
-
 }
 ResizeCameraAndRenderer();
 
@@ -126,8 +210,10 @@ const tick = () =>
     sphereOb2.rotation.x = -rotValue;
 
     //fsphereOb1.rotation.y = Math.sin(rotValue/3);
-    fsphereOb1.rotation.y = rotValue/3;
-    fsphereOb1.rotation.z = rotValue;
+    //colorsphere.rotation.y = rotValue/4 + Math.PI;
+    colorSphere.rotation.z = rotValue;
+
+    lidSphere.rotation.y = Math.sin(elapsedTime);
 
     // Render
     renderer.render(scene, camera)
