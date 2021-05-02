@@ -1,7 +1,5 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
 
-
-
 const _colorSphereVS = `
 varying vec3 v_Normal;
 void main(){
@@ -18,6 +16,8 @@ void main(void)
     float fresnelValue = dot(v_Normal, vec3(0.0, 0.0, 1.0));
     fresnelValue = 1.0 - clamp(fresnelValue, 0.0, 1.0);
     vec3 col = mix(v_Normal, vec3(1.0, 1.0, 1.0), fresnelValue);
+    //col += dot(v_Normal, vec3(0.8, 1.0, 0.5))+1.0;
+
 
     gl_FragColor = vec4(col, fresnelValue);
 }
@@ -58,35 +58,57 @@ vec3 rotate(vec3 v, vec3 axis, float angle)
 	return (m * vec4(v, 1.0)).xyz;
 }
 
-vec4 calculateLid(vec3 normal, vec4 backColor, vec4 rimColor, float angle, float opacityEdgeHardness, float backFresnelHardness)
+
+
+vec4 calculateLid(vec3 normal, vec4 backColor, vec4 rimColor, float angle, float opacityHardness, float rimHardness, float topside)
 {
+  float rimCutoutEffect = 1.0;
   vec3 rotVector = rotate(vec3(0.0, 0.0, 1.0), vec3(-1.0, 0.0, 0.0), angle);
 
   float opacityFresnel = dot(normal, rotVector);
-  opacityFresnel = 1.0 - clamp(opacityFresnel * opacityEdgeHardness, 0.0, 1.0);
+  opacityFresnel = 1.0 - clamp(opacityFresnel * opacityHardness, 0.0, 1.0);
 
-  float backFresnel = dot(normal, -rotVector);
-  backFresnel = 1.0 - clamp(backFresnel, 0.0, 1.0);
-  backFresnel = pow(backFresnel, backFresnelHardness);
+  float rimFresnel = dot(normal, -rotVector);
+  rimFresnel = 1.0 - clamp(rimFresnel, 0.0, 1.0);
+  rimFresnel = pow(rimFresnel, rimHardness);
 
-  vec4 lid = mix(backColor, rimColor, backFresnel);
+  vec3 rotVectorCutout;
+  if(topside < 0.0)
+  {
+    rotVectorCutout = rotate(vec3(0.0, 0.0, 1.0), vec3(-1.0, 0.0, 0.0), angle - 90.0 - 45.0);
+
+  }else
+  {
+    rotVectorCutout = rotate(vec3(0.0, 0.0, 1.0), vec3(-1.0, 0.0, 0.0), angle + (45.0 + 90.0));
+  }
+
+  float rimCutout = dot(normal, -rotVectorCutout);
+  rimCutout = 1.0 - clamp(rimCutout, 0.0, 1.0);
+  rimCutout = pow(rimCutout, rimHardness);
+  rimCutout = 1.0 - rimCutout;
+  rimColor = mix(backColor, rimColor, clamp(rimCutout + (1.0 - rimCutoutEffect), 0.0, 1.0));
+
+  vec4 lid = mix(backColor, rimColor, rimFresnel);
   lid.w = opacityFresnel;
 
   return lid;
 }
 
-void main(void)
+void main()
 {
-  float cleanf = dot(v_Normal, vec3(0.0, 1.0, 0.0));
-  cleanf = floor(cleanf + 1.0);
-
-  vec4 backColor = vec4(0.0, 0.0, 0.0, 0.0);
+  vec4 backColor = vec4(0.0, 0.0, 0.0, 1.0);
   vec4 rimColor = vec4(1.0, 1.0, 1.0, 1.0);
 
-  vec4 topLid = calculateLid(v_Normal, backColor, rimColor, 45.0, 50.0, 6.0);
-  vec4 bottomLid = calculateLid(v_Normal, backColor, rimColor, -25.0, 50.0, 6.0);
+  float l1Angle = 45.0;
+  float l2Angle = -45.0;
 
-  gl_FragColor = mix(bottomLid, topLid, cleanf);
+  vec4 topLid = calculateLid(v_Normal, backColor, rimColor, l1Angle, 50.0, 6.0, 1.0);
+  vec4 bottomLid = calculateLid(v_Normal, backColor, rimColor, l2Angle, 50.0, 6.0, -1.0);
+
+  float lidsLerp =  floor(dot(v_Normal, vec3(0.0, 1.0, 0.0)) + 1.0);
+  vec4 lidsCombined = mix(bottomLid, topLid, lidsLerp);
+
+  gl_FragColor = lidsCombined;
 }
 `;
 
@@ -209,17 +231,23 @@ const tick = () =>
     sphereOb2.rotation.y = rotValue;
     sphereOb2.rotation.x = -rotValue;
 
-    //fsphereOb1.rotation.y = Math.sin(rotValue/3);
-    //colorsphere.rotation.y = rotValue/4 + Math.PI;
     colorSphere.rotation.z = rotValue;
 
-    lidSphere.rotation.y = Math.sin(elapsedTime);
-
+    lidSphere.rotation.y = Math.sin(elapsedTime/ 2)*1.2;
+    lidSphere.rotation.x = Math.sin(elapsedTime)/10;
+    //lidSphere.rotation.y = elapsedTime;
+    //lidSphere.rotation.y = Math.PI;
     // Render
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
 
     // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    window.requestAnimationFrame(tick);
 }
 
 tick()
+
+var MousePos = new THREE.Vector2(0,0);
+
+document.addEventListener('mousemove', (event) => {
+	MousePos = new THREE.Vector2(event.clientX, event.clientY);
+});
