@@ -1,5 +1,61 @@
 import * as THREE from 'https://threejs.org/build/three.module.js';
 
+const _pivotVS = `
+varying vec3 v_Normal;
+void main(){
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    v_Normal = normal;
+}
+`;
+
+const _pivotFS = `
+varying vec3 v_Normal;
+
+void main(void)
+{
+    gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+}
+`;
+
+const _irisVS = `
+varying vec2 Uv;
+void main(){
+    Uv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+
+const _irisFS = `
+varying vec2 Uv;
+
+void main(void)
+{
+    float iris = distance(vec2(0.5, 0.5), Uv);
+    iris = 1.0 - iris * 10.0;
+    iris *= 1.0;
+    iris = clamp(iris, 0.0, 1.0);
+
+    float iniris = distance(vec2(0.5, 0.5), Uv);
+    iniris = 1.0 - iniris * 12.0;
+    iniris *= 12.0;
+
+    vec3 irisCol = mix(vec3(1.0, 1.0, 1.0), vec3(0.0, 0.0, 0.0), iniris);
+
+    float beam =  Uv.y - 0.5;
+    beam = clamp(abs(beam * 4.0), 0.0, 1.0);
+    beam = 1.0 - beam;
+
+    float beamClamper =  Uv.x - 0.5;
+    beamClamper = clamp(abs(beamClamper * 2.0), 0.0, 1.0);
+    beamClamper = 1.0 - beamClamper;
+
+    beam *= beamClamper;
+    beam = pow(beam * 1.2, 4.0);
+
+    gl_FragColor = vec4(irisCol, iris + beam);
+}
+`;
+
 const _colorSphereVS = `
 varying vec3 v_Normal;
 void main(){
@@ -34,6 +90,9 @@ void main(){
 
 const _lidSphereFS = `
 #define M_PI 3.1415926535897932384626433832795
+
+uniform float Lid1Angle;
+uniform float Lid2Angle;
 
 varying vec3 v_Normal;
 
@@ -129,7 +188,9 @@ const pointMaterial = new THREE.PointsMaterial({
     size: 0.1
 })
 pointMaterial.color = new THREE.Color(0xffffff)
-
+pointMaterial.transparent = true;
+pointMaterial.depthWrite = false;
+pointMaterial.depthTest = true;
 
 const colorSphereMat = new THREE.ShaderMaterial({
     vertexShader: _colorSphereVS,
@@ -140,6 +201,14 @@ colorSphereMat.depthWrite = false;
 colorSphereMat.depthTest = true;
 
 const lidSphereMat = new THREE.ShaderMaterial({
+    uniforms: {
+        Lid1Angle: {
+            value: 45
+        },
+        Lid2Angle: {
+            value: -45
+        },
+    },
     vertexShader: _lidSphereVS,
     fragmentShader: _lidSphereFS,
 })
@@ -147,13 +216,32 @@ lidSphereMat.transparent = true;
 lidSphereMat.depthWrite = false;
 lidSphereMat.depthTest = true;
 
+const irisMat = new THREE.ShaderMaterial({
+    vertexShader: _irisVS,
+    fragmentShader: _irisFS,
+})
+irisMat.transparent = true;
+irisMat.depthWrite = false;
+irisMat.depthTest = true;
+
+const pivotMat = new THREE.ShaderMaterial({
+    vertexShader: _pivotVS,
+    fragmentShader: _pivotFS,
+})
+
+
 
 // Objects
+const pivotSphereGeometry = new THREE.SphereGeometry(0.1, 10, 10);
 const pointSphereGeometry = new THREE.SphereGeometry(1, 10, 10);
 const colorSphereGeometry = new THREE.SphereGeometry(1.015, 32, 32);
 const lidSphereGeometry = new THREE.SphereGeometry(1.02, 32, 32);
+const irisPlaneGeometry = new THREE.PlaneGeometry(2, 2, 1);
 
 // Mesh
+const pivotSphere = new THREE.Mesh(pivotSphereGeometry, pivotMat);
+scene.add(pivotSphere);
+
 const sphereOb1 = new THREE.Points(pointSphereGeometry, pointMaterial);
 scene.add(sphereOb1);
 const sphereOb2 = new THREE.Points(pointSphereGeometry, pointMaterial);
@@ -165,12 +253,19 @@ scene.add(colorSphere);
 const lidSphere = new THREE.Mesh(lidSphereGeometry, lidSphereMat);
 scene.add(lidSphere);
 
-colorSphere.renderOrder = 1;
-lidSphere.renderOrder = 2;
+const irisPlane = new THREE.Mesh(irisPlaneGeometry, irisMat);
+scene.add(irisPlane);
 
-sphereOb1.parent = lidSphere;
-sphereOb2.parent = lidSphere;
-colorSphere.parent = lidSphere;
+sphereOb1.renderOrder = 0;
+sphereOb2.renderOrder = 0;
+irisPlane.renderOrder = 1;
+colorSphere.renderOrder = 3;
+lidSphere.renderOrder = 4;
+
+sphereOb1.parent = pivotSphere;
+sphereOb2.parent = pivotSphere;
+colorSphere.parent = pivotSphere;
+irisPlane.parent = pivotSphere;
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 100000)
@@ -213,6 +308,18 @@ function ResizeCameraAndRenderer()
 }
 ResizeCameraAndRenderer();
 
+function lerp(a, b, n) {
+  n = Math.max(1, Math.min(n, 0));
+  return (1 - n) * a + n * b;
+}
+
+//
+var blinkTimer = 0;
+var blinkLerp = 0;
+var blinkEvery = 5;
+var blink = false;
+
+
 // Tick
 const clock = new THREE.Clock()
 
@@ -233,10 +340,44 @@ const tick = () =>
 
     colorSphere.rotation.z = rotValue;
 
-    lidSphere.rotation.y = Math.sin(elapsedTime/ 2)*1.2;
-    lidSphere.rotation.x = Math.sin(elapsedTime)/10;
+    pivotSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.5;
+    pivotSphere.rotation.x = Math.sin(elapsedTime)/10 + Math.sin(elapsedTime / 5)/10;
+
+    lidSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.25;
+    lidSphere.rotation.x = Math.sin(elapsedTime)/5+ Math.sin(elapsedTime / 5)/5;
+
     //lidSphere.rotation.y = elapsedTime;
     //lidSphere.rotation.y = Math.PI;
+
+    //lidSphere.scale.set(1,1,0.5);
+
+    if(elapsedTime - blinkTimer > blinkEvery)
+    {
+      blink = true;
+      blinkTimer = elapsedTime;
+      blinkLerp = 0;
+    }
+    console.log(elapsedTime - blinkTimer);
+
+
+    if(blink)
+    {
+        if(blinkLerp <= 1)
+        {
+          blinkLerp += clock.getDelta();
+          lidSphere.material.uniforms.Lid1Angle.value = lerp(45, 90, blinkLerp);
+        }
+        else if(blinkLerp <= 2)
+        {
+          blinkLerp += clock.getDelta();
+          lidSphere.material.uniforms.Lid1Angle.value = lerp(90, 45, blinkLerp);
+        }
+        else
+        {
+            blink = false;
+        }
+    }
+
     // Render
     renderer.render(scene, camera);
 
