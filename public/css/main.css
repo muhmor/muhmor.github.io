@@ -1,8 +1,10 @@
-html{
+html
+{
   scroll-behavior: smooth;
 }
 
-body{
+body
+{
   background-color: rgb(0,0,0);
   width: 100%;
   padding: 0;
@@ -10,15 +12,9 @@ body{
   color: rgb(250, 250, 250);
 }
 
-header{
-  position: fixed;
-  width: 100%;
-  height: 40px;
-  background-color: rgba(150,150,150,0.2);
-  z-index: 1;
-}
 
-main{
+main
+{
   width: 100%;
   margin-top:0px;
   text-align: center;
@@ -44,23 +40,47 @@ footer b
 
 .OpeningPage
 {
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    background: rgb(25,25,25);
-    user-select: none;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  user-select: none;
+  z-index: 0;
+}
+
+.OpeningPage .iconbox
+{
+  bottom: 50px;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+}
+
+.OpeningPage .iconbox img
+{
+  height: 50px;
+  width: 50px;
+}
+
+.OpeningPage h1
+{
+  font-size: 50px;
+}
+
+.LogoShaderContainer
+{
+  width: 100%;
+  height: 50%;
 }
 
 .LogoShader
 {
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    user-select: none;
+  margin: 0;
+  z-index: 10;
 }
 
 
-.projectgroup-title{
+.projectgroup-title
+{
   text-align: left;
   padding-top: 100px;
   font-size: 55px;
@@ -69,7 +89,8 @@ footer b
 
 }
 
-.projectgroup{
+.projectgroup
+{
   width: 80%;
   max-width: 856px;
   margin: auto;
@@ -78,10 +99,88 @@ footer b
   overflow: hidden;
 }
 
-.projectbox {
+.projectbox
+{
   display: inline-table;
   margin: 1%;
   margin-bottom: 2%;
   background-size: cover;
   background-position: center;
+}
+
+.projectbox h1{
+  position: absolute;
+  font: 46px "Trebuchet Ms", monospace;
+  max-width: 400px;
+  padding-left: 15px;
+  margin-top: 70px;
+  color:  white;
+  font-weight: bold;
+  text-shadow: 0 4px 0px rgb(80,80,80), 0 5px 0px black, 1px 0 0px black, -1px 0 0px black, 0 3px 5px black;
+  pointer-events:none;
+}
+
+.projectbox h2{
+  position: absolute;
+  max-width: 400px;
+  padding-left: 17px;
+  margin-top: 120px;
+  color: rgb(210,210,210);
+  font: 20px "Trebuchet Ms", monospace;
+  font-weight:lighter;
+  text-shadow: 0 1px 0px rgb(80,80,80), 0 2px 0px black, 0 1px 2px black, 0 0 2px black;
+  pointer-events:none;
+}
+
+.bigbox
+{
+  height: 150px;
+  width: 96.5%;
+  max-width: 856px;
+  display: inline-table;
+}
+
+.mediumbox
+{
+  height: 150px;
+  width: 47%;
+  max-width: 428px;
+  display: inline-table;
+}
+
+.smallbox
+{
+  height: 150px;
+  width: 22.25%;
+  max-width: 428px;
+  display: inline-table;
+}
+
+.projectbox .iconbox{
+  height:40px;
+  right: 0;
+  float:right;
+  pointer-events:none;
+}
+
+.projectbox .iconbox img{
+  height: 40px;
+  width: 40px;
+}
+
+.highlightbanner
+{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0);
+  transition: background-color 0.2s;
+}
+
+.highlightbanner:hover
+{
+  background-color: rgba(255,255,255,0.2);
+}
+.highlightbanner:active
+{
+  background-color: rgba(255,208,0,0.2);
 }

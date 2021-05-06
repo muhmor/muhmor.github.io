@@ -13,7 +13,7 @@ varying vec3 v_Normal;
 
 void main(void)
 {
-    gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 }
 `;
 
@@ -145,7 +145,7 @@ vec4 calculateLid(vec3 normal, vec4 backColor, vec4 rimColor, float angle, float
   rimCutout = 1.0 - clamp(rimCutout, 0.0, 1.0);
   rimCutout = pow(rimCutout, rimHardness);
   rimCutout = 1.0 - rimCutout;
-  rimColor = mix(backColor, rimColor, clamp(rimCutout + (1.0 - rimCutoutEffect), 0.0, 1.0));
+  //rimColor = mix(backColor, rimColor, clamp(rimCutout + (1.0 - rimCutoutEffect), 0.0, 1.0));
 
   vec4 lid = mix(backColor, rimColor, rimFresnel);
   lid.w = opacityFresnel;
@@ -158,11 +158,8 @@ void main()
   vec4 backColor = vec4(0.0, 0.0, 0.0, 1.0);
   vec4 rimColor = vec4(1.0, 1.0, 1.0, 1.0);
 
-  float l1Angle = 45.0;
-  float l2Angle = -45.0;
-
-  vec4 topLid = calculateLid(v_Normal, backColor, rimColor, l1Angle, 50.0, 6.0, 1.0);
-  vec4 bottomLid = calculateLid(v_Normal, backColor, rimColor, l2Angle, 50.0, 6.0, -1.0);
+  vec4 topLid = calculateLid(v_Normal, backColor, rimColor, Lid1Angle, 50.0, 5.0, 1.0);
+  vec4 bottomLid = calculateLid(v_Normal, backColor, rimColor, Lid2Angle, 50.0, 5.0, -1.0);
 
   float lidsLerp =  floor(dot(v_Normal, vec3(0.0, 1.0, 0.0)) + 1.0);
   vec4 lidsCombined = mix(bottomLid, topLid, lidsLerp);
@@ -177,10 +174,12 @@ const canvas = document.querySelector('canvas.LogoShader')
 // Scene
 const scene = new THREE.Scene()
 
+const canvasScalar = 0.4;
+
 //Sizes
 const sizes = {
-    width: document.body.clientWidth/2,
-    height: window.innerHeight/2
+    width: Math.min(window.innerHeight*canvasScalar, document.body.clientWidth),
+    height: Math.min(window.innerHeight*canvasScalar, document.body.clientWidth)
 }
 
 // Materials
@@ -203,7 +202,7 @@ colorSphereMat.depthTest = true;
 const lidSphereMat = new THREE.ShaderMaterial({
     uniforms: {
         Lid1Angle: {
-            value: 45
+            value: 50
         },
         Lid2Angle: {
             value: -45
@@ -229,10 +228,8 @@ const pivotMat = new THREE.ShaderMaterial({
     fragmentShader: _pivotFS,
 })
 
-
-
 // Objects
-const pivotSphereGeometry = new THREE.SphereGeometry(0.1, 10, 10);
+const pivotSphereGeometry = new THREE.SphereGeometry(0.17, 24, 24);
 const pointSphereGeometry = new THREE.SphereGeometry(1, 10, 10);
 const colorSphereGeometry = new THREE.SphereGeometry(1.015, 32, 32);
 const lidSphereGeometry = new THREE.SphereGeometry(1.02, 32, 32);
@@ -256,16 +253,16 @@ scene.add(lidSphere);
 const irisPlane = new THREE.Mesh(irisPlaneGeometry, irisMat);
 scene.add(irisPlane);
 
-sphereOb1.renderOrder = 0;
-sphereOb2.renderOrder = 0;
-irisPlane.renderOrder = 1;
-colorSphere.renderOrder = 3;
-lidSphere.renderOrder = 4;
-
 sphereOb1.parent = pivotSphere;
 sphereOb2.parent = pivotSphere;
 colorSphere.parent = pivotSphere;
 irisPlane.parent = pivotSphere;
+
+irisPlane.renderOrder = 0;
+sphereOb1.renderOrder = 1;
+sphereOb2.renderOrder = 1;
+colorSphere.renderOrder = 3;
+lidSphere.renderOrder = 4;
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(10, sizes.width / sizes.height, 0.1, 100000)
@@ -292,8 +289,8 @@ window.addEventListener('resize', () =>
 function ResizeCameraAndRenderer()
 {
   // Update sizes
-  sizes.width = document.body.clientWidth/2;
-  sizes.height = document.body.clientWidth/2;
+  sizes.width = Math.min(window.innerHeight*canvasScalar, document.body.clientWidth);
+  sizes.height = Math.min(window.innerHeight*canvasScalar, document.body.clientWidth);
 
   // Update camera
   camera.aspect = sizes.width / sizes.height;
@@ -340,17 +337,22 @@ const tick = () =>
 
     colorSphere.rotation.z = rotValue;
 
-    pivotSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.5;
-    pivotSphere.rotation.x = Math.sin(elapsedTime)/10 + Math.sin(elapsedTime / 5)/10;
+    //pivotSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.5;
+    //pivotSphere.rotation.x = Math.sin(elapsedTime)/10 + Math.sin(elapsedTime / 5)/10;
 
-    lidSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.25;
-    lidSphere.rotation.x = Math.sin(elapsedTime)/5+ Math.sin(elapsedTime / 5)/5;
-
+    //lidSphere.rotation.y = Math.sin(elapsedTime/ 2)*0.25;
+    //lidSphere.rotation.x = Math.sin(elapsedTime)/5+ Math.sin(elapsedTime / 5)/5;
+    ///
+    lidSphere.rotation.y = elapsedTime + Math.PI;
+    colorSphere.rotation.y = elapsedTime + Math.PI;
+    lidSphere.material.uniforms.Lid1Angle.value = 0;
+    lidSphere.material.uniforms.Lid2Angle.value = 0;
     //lidSphere.rotation.y = elapsedTime;
     //lidSphere.rotation.y = Math.PI;
 
     //lidSphere.scale.set(1,1,0.5);
-
+    //lidSphere.material.uniforms.Lid1Angle.value = lerp(45, 90, elapsedTime);
+    /*
     if(elapsedTime - blinkTimer > blinkEvery)
     {
       blink = true;
@@ -358,7 +360,6 @@ const tick = () =>
       blinkLerp = 0;
     }
     console.log(elapsedTime - blinkTimer);
-
 
     if(blink)
     {
@@ -377,7 +378,7 @@ const tick = () =>
             blink = false;
         }
     }
-
+    */
     // Render
     renderer.render(scene, camera);
 
