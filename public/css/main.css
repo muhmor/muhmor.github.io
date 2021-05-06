@@ -49,7 +49,7 @@ footer b
 
 .OpeningPage .iconbox
 {
-  bottom: 50px;
+  bottom: 70px;
   width: 100%;
   position: absolute;
   text-align: center;
@@ -63,7 +63,15 @@ footer b
 
 .OpeningPage h1
 {
-  font-size: 50px;
+  font-size: 60px;
+}
+.OpeningPage h2
+{
+  font-size: 40px;
+}
+.OpeningPage h3
+{
+  font-size: 20px;
 }
 
 .LogoShaderContainer
@@ -83,7 +91,8 @@ footer b
 {
   text-align: left;
   padding-top: 100px;
-  font-size: 55px;
+  padding-left: 20%;
+  font-size: 70px;
   margin-top: 35px;
   margin-bottom: 80px;
 
@@ -91,7 +100,7 @@ footer b
 
 .projectgroup
 {
-  width: 80%;
+  width: 60%;
   max-width: 856px;
   margin: auto;
   margin-top: 35px;
@@ -180,7 +189,26 @@ footer b
 {
   background-color: rgba(255,255,255,0.2);
 }
+
 .highlightbanner:active
 {
   background-color: rgba(255,208,0,0.2);
+}
+
+.arrow {
+  position: absolute;
+  bottom: 25px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 6px;
+  transform: rotate(45deg);
+  animation: bottomarrowanim 3s infinite;
+  transition: transform 0.5s;
+}
+
+@keyframes bottomarrowanim {
+  0%   {   bottom: 15px;  }
+  50%   {   bottom: 25px; }
+  100%   {   bottom: 15px;  }
 }
